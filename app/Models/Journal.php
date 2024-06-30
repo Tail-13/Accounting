@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\CustomModelTraits;
 use App\Traits\CustomTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class Journal extends Model
 {
-    use HasFactory;
-    use CustomTraits;
+    use HasFactory, CustomTraits;
+
+    protected $hidden = self::baseAttribute;
     public $timestamps = false;
+
     public function detail() {
         return $this->hasMany(JournalDetail::class);
     }

@@ -16,4 +16,20 @@ class AccountRestController extends Controller
             return response()->json(['errors' => $e->getMessage()], $e->getCode());
         }
     }
+
+    public function create(Request $request) {
+        try {
+            $account = new Account();
+            $data = [
+                'name' => $request->name,
+                'description' => $request->description,
+                'account_type_id' => $request->account_type_id,
+                'balance' => $request->balance,
+                'user_id' => $request->user_id
+            ];
+            return response()->json(['data' => $account->create($data)], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], $e->getCode());
+        }
+    }
 }

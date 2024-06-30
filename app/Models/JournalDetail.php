@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\CustomModelTraits;
 use App\Traits\CustomTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,8 +9,9 @@ use Illuminate\Http\Response;
 
 class JournalDetail extends Model
 {
-    use HasFactory;
-    use CustomTraits;
+    use HasFactory, CustomTraits;
+    protected $hidden = self::baseAttribute;
+
     public function journal(){
         return $this->belongsTo(Journal::class);
     }
