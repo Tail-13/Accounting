@@ -51,6 +51,10 @@ class Account extends Model
                 throw new \Exception($data['name'] . ' already exists', Response::HTTP_CONFLICT);
             }
 
+            if(!AccountType::where('id', $data['account_type_id'])->exists()){
+                throw new \Exception('account type not found', Response::HTTP_BAD_REQUEST);
+            }
+
             $account->name = $data['name'];
             $account->description = $data['description'];
             $account->account_type_id = $data['account_type_id'];

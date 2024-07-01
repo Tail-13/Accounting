@@ -44,6 +44,15 @@ class AccessToken extends Model
         }
     }
 
+    public function hardDelete($data) {
+        $accessTokens = AccessToken::where('user_id', $data['user_id'])
+                        ->where('user_agent', $data['user_agent'])
+                        ->where('ip', $data['ip'])->first();
+        if($accessTokens) {
+            $accessTokens->delete();
+        }
+    }
+
     public static function deleteExpiredTokens(){
         DB::delete("DELETE FROM access_tokens WHERE expires_at < NOW()");
     }

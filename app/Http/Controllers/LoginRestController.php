@@ -40,9 +40,14 @@ class LoginRestController extends Controller
 
     public function logout(Request $request) {
         try {
-            if($request->user_id) {
-                if($request->header('user_agent'))
-            }
+            $data = [
+                'user_id' => $request->user_id,
+                'user_agent' => $request->header('user_agent'),
+                'ip' => $request->ip(),
+            ];
+            $accessToken = new AccessToken();
+            $accessToken->hardDelete($data);
+            return response()->json(['success' => 'user logged out'], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json(['errors' => $e->getMessage()], $e->getCode());
         }
