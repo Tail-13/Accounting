@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\CustomModelTraits;
 use App\Traits\CustomTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,10 +9,17 @@ use Illuminate\Http\Response;
 
 class AccountType extends Model
 {
-    use HasFactory;
-    use CustomTraits;
+    use HasFactory, CustomTraits;
+
     public $timestamps = false;
     protected $fillable = ["*"];
+    protected $hidden = [];
+
+    //* additional hidden attribute
+    public function getHidden() {
+        return array_merge(self::baseAttribute, ['required']);
+    }
+
     public function account(){
         return $this->hasMany(Account::class);
     }
@@ -25,6 +31,18 @@ class AccountType extends Model
                 throw new \Exception("no data found", Response::HTTP_NO_CONTENT);
             }
             return $accountType;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public static function getById($id) {
+        try {
+            $accountType = AccountType::where('is_deleted', false)->find($id);
+            if($accountType) {
+                return $accountType;
+            }
+            throw new \Exception("account type not exists", Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

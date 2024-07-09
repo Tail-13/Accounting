@@ -2,21 +2,18 @@
 
 namespace App\Models;
 
-use App\Traits\CustomModelTraits;
 use App\Traits\CustomTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Response;
 
 class Account extends Model
 {
-    use HasFactory;
-    use CustomTraits;
-    use SoftDeletes;
-    public $timestamps = false;
+    use HasFactory, CustomTraits;
 
+    public $timestamps = false;
     protected $fillable = ["*"];
+    protected $hidden = $this->baseAttribute;
 
     public function journal() {
         return $this->hasMany(Journal::class);
@@ -32,8 +29,7 @@ class Account extends Model
 
     public function getByUser($user_id) {
         try {
-            $account = new Account();
-            $account->where('user_id', $user_id)->get();
+            $account = Account::where('user_id', $user_id)->get();
             if ($account->count() > 0) {
                 return $account;
             }

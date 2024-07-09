@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\AccessToken;
 use App\Models\User;
-use App\Models\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,14 +39,11 @@ class LoginRestController extends Controller
 
     public function logout(Request $request) {
         try {
-            $data = [
-                'user_id' => $request->user_id,
-                'user_agent' => $request->header('user_agent'),
-                'ip' => $request->ip(),
-            ];
-            $accessToken = new AccessToken();
-            $accessToken->hardDelete($data);
-            return response()->json(['success' => 'user logged out'], Response::HTTP_OK);
+            if($request->user_id) {
+                if($request->header('user_agent')) {
+
+                }
+            }
         } catch (\Exception $e) {
             return response()->json(['errors' => $e->getMessage()], $e->getCode());
         }

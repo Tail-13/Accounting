@@ -6,6 +6,9 @@ use App\Models\User;
 use Carbon\Carbon;
 
 trait CustomTraits {
+    protected $baseAttribute = [
+        'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_by', 'deleted_at', 'is_deleted'
+    ];
 
     public function baseProperties($table) {
         $table->boolean("is_deleted")->default(false);

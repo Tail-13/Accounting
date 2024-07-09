@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
-    use HasFactory;
-    use CustomTraits;
+    use HasFactory, CustomTraits;
     public $timestamps = false;
     protected $fillable = ['*'];
+    protected $hidden = self::baseAttribute;
 
     public function role() {
         return $this->belongsTo(Role::class, 'role_code', 'code');
@@ -26,9 +26,12 @@ class UserRole extends Model
         $userRole->where('is_deleted', false)->get();
     }
 
-    public function checkRole($user_id, $roleName = null) {
+    public static function checkRole($user_id, $roleName) {
         $userRole = new UserRole();
         $role = $userRole->with('role')->where('user_id', $user_id)->first();
-        return $role->role->name;
+        if($role->role->name == $roleName) {
+            return true;
+        }
+        return false;
     }
 }

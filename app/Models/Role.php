@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\CustomModelTraits;
+use App\Traits\CustomTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    use HasFactory;
+    use HasFactory, CustomTraits;
+    protected $hidden = self::baseAttribute;
 }

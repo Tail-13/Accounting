@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Traits\CustomModelTraits;
 use App\Traits\CustomTraits;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
@@ -19,6 +17,7 @@ class User extends Model
     protected $fillable = ['*'];
 
     protected $hidden = [
+        'password',
         'created_at',
         'updated_by',
         'updated_at',
@@ -34,16 +33,13 @@ class User extends Model
     public function create($data) {
         try {
             $user = new User();
-            $errorMessage = '';
 
             if($user->where('username', $data['username'])->exists()) {
-                $errorMessage .= "username " . $data['username'] . " already exists\n";
+                throw new \Illuminate\Validation\ValidationException("username " . $data['username'] . " already exists", Response::HTTP_BAD_REQUEST);
             }
+
             if($user->where('email', $data['email'])->exists()){
-                $errorMessage .= "email " . $data['email'] . " already exists\n";
-            }
-            if(!empty($errorMessage)){
-                throw new \Exception("$errorMessage", Response::HTTP_BAD_REQUEST);
+                throw new \Exception("email " . $data['email'] . " already exists", Response::HTTP_BAD_REQUEST);
             }
 
             $user->username = $data['username'];
